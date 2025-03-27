@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from pymongo import MongoClient
 import pymongo
 from sentence_transformers import SentenceTransformer
+import os
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -103,8 +104,8 @@ def crawl_news_urls(sites, model):
 
 def main():
     model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-
-    client = MongoClient("mongodb+srv://uytbvn:13022005@nludatabase.leaih.mongodb.net/?retryWrites=true&w=majority&appName=NLUDatabase")
+    mongodb_url = os.getenv("MONGODB_URI")
+    client = MongoClient(mongodb_url)
     db = client["Soni_Agent"]
     collection = db["stock_news"]
     config_collection = db["configs"]

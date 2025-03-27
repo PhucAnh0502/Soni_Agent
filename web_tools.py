@@ -14,7 +14,8 @@ from sentence_transformers import SentenceTransformer
 
 
 ####### INIT ##########
-MONGO_URI = "mongodb+srv://uytbvn:13022005@nludatabase.leaih.mongodb.net/?retryWrites=true&w=majority&appName=NLUDatabase"
+
+MONGO_URI = os.getenv("MONGO_URI")
 client = MongoClient(MONGO_URI)
 db = client["Soni_Agent"]
 collection = db["stock_news"]
