@@ -9,6 +9,7 @@ from pymongo import MongoClient
 import pymongo
 from sentence_transformers import SentenceTransformer
 import os
+from dotenv import load_dotenv
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -103,6 +104,7 @@ def crawl_news_urls(sites, model):
     return news_urls
 
 def main():
+    load_dotenv()
     model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
     mongodb_url = os.getenv("MONGODB_URI")
     client = MongoClient(mongodb_url)

@@ -14,12 +14,11 @@ from sentence_transformers import SentenceTransformer
 
 
 ####### INIT ##########
-
-MONGO_URI = os.getenv("MONGO_URI")
+load_dotenv()
+MONGO_URI = os.getenv("MONGODB_URI")
 client = MongoClient(MONGO_URI)
 db = client["Soni_Agent"]
 collection = db["stock_news"]
-
 model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
 load_dotenv()
@@ -147,4 +146,4 @@ def semantic_search_news_db(
     except Exception as e:
         return []
     
-print(semantic_search_news_db("Tp Bank hôm nay"))
+print(semantic_search_news_db("AB Bank hom nay"))  
