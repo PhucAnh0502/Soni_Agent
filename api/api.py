@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from langchain_community.tools.tavily_search import TavilySearchResults
 from sentence_transformers import SentenceTransformer
 from pymongo import MongoClient
 from pymongo.collection import Collection
@@ -12,7 +13,6 @@ import time
 
 app = FastAPI()
 
-model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 MONGO_URI = os.getenv("MONGODB_URI")
 client = MongoClient(MONGO_URI)
 db = client["Soni_Agent"]
@@ -23,6 +23,24 @@ from bs4 import BeautifulSoup
 
 load_dotenv()
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
+
+@app.get("/tavily_search/")
+def tavily_tool(query):
+    response = TavilySearchResults(max_results=5).invoke(query)  
+    
+    if not isinstance(response, list):
+        return []
+
+    lst = []
+    for item in response:
+        if isinstance(item, tuple) and len(item) == 2:
+            item = {"url": item[0], "score": item[1]}
+
+        if isinstance(item, dict) and "score" in item and "url" in item:
+            if item["score"] > 0.55:
+                lst.append(item["url"])
+
+    return lst
 
 def clean_html(html_content):
     """Removes scripts, styles, and extracts visible text."""
