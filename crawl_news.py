@@ -139,8 +139,8 @@ def main():
         else:
             logging.info("Không tìm thấy bài viết nào mới.")
         
-        logging.info("Chờ 5 phút trước lần crawl tiếp theo...")
-        time.sleep(300)
+        logging.info("Chờ 1h trước lần crawl tiếp theo...")
+        time.sleep(3600*60)
 
 if __name__ == "__main__":
     main()
