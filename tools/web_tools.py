@@ -22,7 +22,22 @@ TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
 ####### TOOLS ##########
 
-tavily_tool = TavilySearchResults(max_results=5)
+def tavily_tool(query):
+    response = TavilySearchResults(max_results=5).invoke(query)  
+    
+    if not isinstance(response, list):
+        return []
+
+    lst = []
+    for item in response:
+        if isinstance(item, tuple) and len(item) == 2:
+            item = {"url": item[0], "score": item[1]}
+
+        if isinstance(item, dict) and "score" in item and "url" in item:
+            if item["score"] > 0.55:
+                lst.append(item["url"])
+
+    return lst
 
 repl = PythonREPL()
 
@@ -86,3 +101,4 @@ def extract_info_tool(url: Annotated[str, "The URL to extract information from."
         return get_facebook_content(url)
     return get_web_content(url)
 
+print(tavily_tool("Innovation day"))
